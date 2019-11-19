@@ -15,6 +15,6 @@ class HelloController extends AbstractController
      */
     public function hello($name)
     {
-        $this->render('hello.html.twig', ['name' => $name]);
+         return $this->render('hello.html.twig', ['name' => $name]);
     }
 }
