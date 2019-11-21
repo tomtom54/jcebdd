@@ -31,6 +31,12 @@ class Adherent
      */
     private $dateNaissance;
 
+    public function __construct()
+    {
+        //Par défaut, la date de l'annonce est la date d'aujourd'hui
+        $this->dateNaissance = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

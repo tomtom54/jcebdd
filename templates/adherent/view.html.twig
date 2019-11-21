@@ -1,0 +1,33 @@
+{# templates/adherent/view.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+  Affichage d'un adhérent - {{ parent() }}
+{% endblock %}
+
+{% block platform_body %}
+
+  <h2>{{ adherent.prenom ~ ' ' ~ adherent.nom }}</h2>
+  <i>Né le {{ adherent.dateNaissance|date('d/m/Y') }}</i>
+
+  {#<div class="well">
+    {{ advert.content }}
+  </div>#}
+
+  <p>
+    <a href="{{ path('jce_adherent_index') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la liste
+    </a>
+    <a href="{{ path('jce_adherent_edit', {'id': adherent.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-edit"></i>
+      Modifier l'adhérent
+    </a>
+    <a href="{{ path('jce_adherent_delete', {'id': adherent.id}) }}" class="btn btn-danger">
+      <i class="glyphicon glyphicon-trash"></i>
+      Supprimer l'adhérent
+    </a>
+  </p>
+
+{% endblock %}

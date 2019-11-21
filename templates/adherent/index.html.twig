@@ -1,0 +1,26 @@
+{# templates/adherent/index.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+  Accueil - {{ parent() }}
+{% endblock %}
+
+{% block platform_body %}
+
+  <h2>Liste des adhérents</h2>
+
+  <ul>
+    {% for adherent in listAdherents %}
+      <li>
+        <a href="{{ path('jce_adherent_view', {'id': adherent.id}) }}">
+          {{ adherent.prenom ~ ' ' ~ adherent.nom }}
+        </a>
+        né(e) le {{ adherent.dateNaissance|date('d/m/Y') }}
+      </li>
+    {% else %}
+      <li>Pas (encore !) d'adhérents</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

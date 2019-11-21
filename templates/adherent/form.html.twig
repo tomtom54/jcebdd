@@ -1,0 +1,22 @@
+{# templates/adherent/form.html.twig #}
+
+<h3>Formulaire adhérent</h3>
+
+{# On laisse vide la vue pour l'instant, on la comblera plus tard
+   lorsqu'on saura afficher un formulaire. #}
+<div class="well">
+                 {# {{ form_start(form, {
+                    'attr': {
+                        'novalidate': 'novalidate',
+                        'class': 'col-lg-5' 
+                        }
+                    })
+                }} #}
+
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.dateNaissance) }}
+
+                    <button type="submit" class="btn btn-primary">Valider</button>
+                {{ form_end(form) }}
+</div>

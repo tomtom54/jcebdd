@@ -1,0 +1,11 @@
+{# templates/adherent/menu.html.twig #}
+
+<ul class="nav nav-pills nav-stacked">
+  {% for adherent in listAdherents %}
+    <li>
+      <a href="{{ path('jce_adherent_view', {'id': adherent.id}) }}">
+        {{ adherent.prenom ~ ' ' ~ adherent.nom }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
