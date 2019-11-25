@@ -115,14 +115,32 @@ class AdherentController extends AbstractController
      */
      public function edit($id, Request $request)
      {
+        $repository = $this->getDoctrine()
+        ->getManager()
+        ->getRepository(Adherent::class);
+
+        // On récupère l'entité correspondante à l'id $id
+        $adherent = $repository->find($id);
+
+        // $adherent est donc une instance de OC\PlatformBundle\Entity\Advert
+        // ou null si l'id $id  n'existe pas, d'où ce if :
+        if (null === $adherent) {
+          throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        } 
+      
+        //Création du formulaire
+        $form = $this->createForm(AdherentType::class, $adherent);
+        $form->handleRequest($request);
+
         if($request->ismethod('POST')) {
             $this->addflash('notice', 'Annonce bien modifiée.');
 
-            return $this->redirectToRoute('jce_advert_view',['id' => $id]);
+            return $this->redirectToRoute('jce_adherent_view',['id' => $id]);
         }
 
-        return $this->render('adherent/edit.html.twig',['id' => $id]);
-     }
+        return $this->render('adherent/edit.html.twig', array(
+          'form' => $form->createView(), 'id' => $id,));
+     }    
 
      /**
       * @Route("/delete/{id}", name="jce_adherent_delete", requirements={"id" = "\d+"})
@@ -147,13 +165,38 @@ class AdherentController extends AbstractController
       */
       public function menuAction($limit)
       {
-        // On fixe en dur une liste ici, bien entendu par la suite
-        // on la récupérera depuis la BDD !
-        $listAdherents = array(
-        array('id' => 1, 'nom' => 'Bur','prenom' => 'Antho'),
-        array('id' => 2, 'nom' => 'Clette','prenom' => 'Lara'),
-        array('id' => 3, 'nom' => 'Pancuir','prenom' => 'Slip')
+        //Récupération du Repository
+        $repository = $this->getDoctrine()->getRepository(Adherent::class);
+
+        //Retrouver tous les Adherents par ordre descendant d'identifiant
+        $adherents = $repository->findby(
+          array(),
+          array('id' => 'DESC')
         );
+        //$adherents = $repository->findAll();
+
+        //Compter le nombre à afficher
+        if (count($adherents) < $limit) {
+          $max = count($adherents);
+        }
+        else {
+          $max = $limit;
+        }
+        
+        //initialisation tableau
+        $listAdherents = array();
+
+        if ($max > 0) {
+          //Remplis avec les $limit derniers adhérents
+          $j = 0;
+          //$listAdherents = array(array('id' => $adherents->getId(), 'nom' => $adherents->getNom(),'prenom' => $adherents->getPrenom()));
+        
+          for ($i = $max-1; $i >= 0; $i--) {   
+          //array_push($listAdherents,array('id' => $adherents[$i]->getId(), 'nom' => $adherents[$i]->getNom(),'prenom' => $adherents[$i]->getPrenom()));
+          $listAdherents[] = array('id' => $adherents[$i]->getId(), 'nom' => $adherents[$i]->getNom(),'prenom' => $adherents[$i]->getPrenom());
+          $j++;
+          }
+        }
 
         return $this->render('adherent/menu.html.twig', array(
         // Tout l'intérêt est ici : le contrôleur passe
@@ -169,9 +212,25 @@ class AdherentController extends AbstractController
       public function indexAction($page)
       {
         // ...
+        
+        //Récupération du Repository
+        $repository = $this->getDoctrine()->getRepository(Adherent::class);
 
+        $adherents = $repository->findAll();
+
+        //initialisation tableau
+        $listAdherents = array();
+
+        for ($i=0 ; $i < count($adherents) ; $i++) {
+          $listAdherents[] = array(
+            'id' => $adherents[$i]->getId(), 
+            'nom' => $adherents[$i]->getNom(),
+            'prenom' => $adherents[$i]->getPrenom(),
+            'dateNaissance' => $adherents[$i]->getDateNaissance(),
+          );
+        }
         // Notre liste d'annonce en dur
-        $listAdherents = array(
+        /*$listAdherents = array(
         array(
           'nom'   => 'Bur',
           'id'      => 1,
@@ -187,7 +246,7 @@ class AdherentController extends AbstractController
           'id'      => 3,
           'prenom'  => 'Slip',
           'dateNaissance' => new \Datetime()),
-      );
+      );*/
 
       // Et modifiez le 2nd argument pour injecter notre liste
       return $this->render('adherent/index.html.twig', array(
