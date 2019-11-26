@@ -72,19 +72,10 @@ class AdherentController extends AbstractController
         // On crée le FormBuilder grâce au service form factory
         //$formBuilder = $this->createBuilder(AdherentType::class, $adherent);
 
-        // On ajoute les champs de l'entité que l'on veut à notre formulaire
-        $form = $this->CreateformBuilder($adherent)
-          ->add('nom',      TextType::class)
-          ->add('prenom',   TextType::class)
-          ->add('dateNaissance',   DateType::class, [
-            'widget' => 'single_text',
-            'format' => 'dd/MM/yyyy',
-          ])
-          //->add('author',    TextType::class)
-          //->add('published', CheckboxType::class)
-          //->add('save',      SubmitType::class)
-          ->getForm();
-    
+        //Création du formulaire
+        $form = $this->createForm(AdherentType::class, $adherent);
+
+
           // Si la requête est en POST
           if ($request->isMethod('POST')) {
             // On fait le lien Requête <-> Formulaire
@@ -103,8 +94,8 @@ class AdherentController extends AbstractController
 
             // On redirige vers la page de visualisation de l'annonce nouvellement créée
             return $this->redirectToRoute('jce_adherent_view', array('id' => $adherent->getId()));
+            }
           }
-        }
 
         // Si on n'est pas en POST, alors on affiche le formulaire
         return $this->render('adherent/add.html.twig', array(
@@ -131,18 +122,8 @@ class AdherentController extends AbstractController
           throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         } 
 
-        // On ajoute les champs de l'entité que l'on veut à notre formulaire
-        $form = $this->CreateformBuilder($adherent)
-        ->add('nom',      TextType::class)
-        ->add('prenom',   TextType::class)
-        ->add('dateNaissance',   DateType::class, [
-          'widget' => 'single_text',
-          'format' => 'dd/MM/yyyy',
-        ])
-                //->add('author',    TextType::class)
-                //->add('published', CheckboxType::class)
-                //->add('save',      SubmitType::class)
-        ->getForm();
+        //Création du formulaire
+        $form = $this->createForm(AdherentType::class, $adherent);
           
         // Si la requête est en POST
         if ($request->isMethod('POST')) {
