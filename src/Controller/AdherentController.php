@@ -8,6 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Adherent;
 use App\Form\AdherentType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Repository\AdherentRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -63,51 +66,50 @@ class AdherentController extends AbstractController
       */
     public function add(Request $request)
     {
-        //Récupération de la date
-        //$dt = new \DateTime();//date("Y-m-d H:i:s");
-    
-        // Création de l'entité
+        // On crée un objet Adherent
         $adherent = new Adherent();
-        $adherent->setPrenom('Anthony');
-        $adherent->setNom('Burton');
-        $dateNaissance = $adherent->getDateNaissance();
-        $dateNaissance->setDate(1985,10,2);
 
+        // On crée le FormBuilder grâce au service form factory
+        //$formBuilder = $this->createBuilder(AdherentType::class, $adherent);
 
-        // On récupère l'EntityManager
-        $em = $this->getDoctrine()->getManager();
+        // On ajoute les champs de l'entité que l'on veut à notre formulaire
+        $form = $this->CreateformBuilder($adherent)
+          ->add('nom',      TextType::class)
+          ->add('prenom',   TextType::class)
+          ->add('dateNaissance',   DateType::class, [
+            'widget' => 'single_text',
+            'format' => 'dd/MM/yyyy',
+          ])
+          //->add('author',    TextType::class)
+          //->add('published', CheckboxType::class)
+          //->add('save',      SubmitType::class)
+          ->getForm();
+    
+          // Si la requête est en POST
+          if ($request->isMethod('POST')) {
+            // On fait le lien Requête <-> Formulaire
+            // À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
+            $form->handleRequest($request);
 
-        // Étape 1 : On « persiste » l'entité
-        $em->persist($adherent);
+            // On vérifie que les valeurs entrées sont correctes
+            // (Nous verrons la validation des objets en détail dans le prochain chapitre)
+            if ($form->isValid()) {
+            // On enregistre notre objet $advert dans la base de données, par exemple
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($adherent);
+            $em->flush();
 
-        // Étape 2 : On « flush » tout ce qui a été persisté avant
-        $em->flush();
-
-        //Création du formulaire
-        $form = $this->createForm(AdherentType::class, $adherent);
-        $form->handleRequest($request);
-        
-        // Reste de la méthode qu'on avait déjà écrit
-        if ($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('notice', 'Adhérent bien enregistré.');
 
-            // Puis on redirige vers la page de visualisation de cettte annonce
+            // On redirige vers la page de visualisation de l'annonce nouvellement créée
             return $this->redirectToRoute('jce_adherent_view', array('id' => $adherent->getId()));
+          }
         }
 
         // Si on n'est pas en POST, alors on affiche le formulaire
         return $this->render('adherent/add.html.twig', array(
           'form' => $form->createView(),
         ));
-      
-      
-        /*     if($request->ismethod('POST')) {
-                $this->addflash('notice', 'Annonce bien enregistrée.');
-
-                return $this->redirectToRoute('jce_advert_view',['id' => 5]);
-                }   
-
-        return $this->render('Advert/add.html.twig');*/
     }
 
     /**
@@ -115,31 +117,59 @@ class AdherentController extends AbstractController
      */
      public function edit($id, Request $request)
      {
-        $repository = $this->getDoctrine()
-        ->getManager()
-        ->getRepository(Adherent::class);
+        //Récupération du Repository
+        $repository = $this->getDoctrine()->getRepository(Adherent::class);
+      
 
         // On récupère l'entité correspondante à l'id $id
-        $adherent = $repository->find($id);
+        $adherent = $repository->find($id);        
+
 
         // $adherent est donc une instance de OC\PlatformBundle\Entity\Advert
         // ou null si l'id $id  n'existe pas, d'où ce if :
         if (null === $adherent) {
           throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         } 
+
+        // On ajoute les champs de l'entité que l'on veut à notre formulaire
+        $form = $this->CreateformBuilder($adherent)
+        ->add('nom',      TextType::class)
+        ->add('prenom',   TextType::class)
+        ->add('dateNaissance',   DateType::class, [
+          'widget' => 'single_text',
+          'format' => 'dd/MM/yyyy',
+        ])
+                //->add('author',    TextType::class)
+                //->add('published', CheckboxType::class)
+                //->add('save',      SubmitType::class)
+        ->getForm();
+          
+        // Si la requête est en POST
+        if ($request->isMethod('POST')) {
+          // On fait le lien Requête <-> Formulaire
+          // À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
+          $form->handleRequest($request);
       
-        //Création du formulaire
-        $form = $this->createForm(AdherentType::class, $adherent);
-        $form->handleRequest($request);
-
-        if($request->ismethod('POST')) {
-            $this->addflash('notice', 'Annonce bien modifiée.');
-
-            return $this->redirectToRoute('jce_adherent_view',['id' => $id]);
-        }
-
+          // On vérifie que les valeurs entrées sont correctes
+          // (Nous verrons la validation des objets en détail dans le prochain chapitre)
+          if ($form->isValid()) {
+            // On enregistre notre objet $advert dans la base de données, par exemple
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($adherent);
+            $em->flush();
+      
+            $request->getSession()->getFlashBag()->add('notice', 'Adhérent bien modifié.');
+      
+            // On redirige vers la page de visualisation de l'annonce nouvellement créée
+            return $this->redirectToRoute('jce_adherent_view', array('id' => $adherent->getId()));
+            }
+          }
+      
+        // Si on n'est pas en POST, alors on affiche le formulaire
         return $this->render('adherent/edit.html.twig', array(
-          'form' => $form->createView(), 'id' => $id,));
+        'form' => $form->createView(),
+        'id' => $id,
+        ));
      }    
 
      /**
@@ -216,7 +246,12 @@ class AdherentController extends AbstractController
         //Récupération du Repository
         $repository = $this->getDoctrine()->getRepository(Adherent::class);
 
-        $adherents = $repository->findAll();
+        //Retrouver tous les Adherents par ordre descendant d'identifiant
+        $adherents = $repository->findby(
+          array(),
+          array('nom' => 'ASC'),
+          array('prenom' => 'ASC')
+        );
 
         //initialisation tableau
         $listAdherents = array();
@@ -229,24 +264,6 @@ class AdherentController extends AbstractController
             'dateNaissance' => $adherents[$i]->getDateNaissance(),
           );
         }
-        // Notre liste d'annonce en dur
-        /*$listAdherents = array(
-        array(
-          'nom'   => 'Bur',
-          'id'      => 1,
-          'prenom'  => 'Antho',
-          'dateNaissance' => new \Datetime()),
-        array(
-          'nom'   => 'Clette',
-          'id'      => 2,
-          'prenom'  => 'Lara',
-          'dateNaissance' => new \Datetime()),
-        array(
-          'nom'   => 'Pancuir',
-          'id'      => 3,
-          'prenom'  => 'Slip',
-          'dateNaissance' => new \Datetime()),
-      );*/
 
       // Et modifiez le 2nd argument pour injecter notre liste
       return $this->render('adherent/index.html.twig', array(
