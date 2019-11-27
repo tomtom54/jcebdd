@@ -4,6 +4,16 @@
 
 {# On laisse vide la vue pour l'instant, on la comblera plus tard
    lorsqu'on saura afficher un formulaire. #}
+
+{#<script>
+    $(document).ready(function() {
+        // you may need to change this code if you are not using Bootstrap Datepicker
+        $('.js-datepicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+    });
+</script>#}
+
 <div class="well">
                 {{ form_start(form) }}
                  {# {{ form_start(form, {
@@ -17,6 +27,7 @@
                     {{ form_row(form.nom) }}
                     {{ form_row(form.prenom) }}
                     {{ form_row(form.dateNaissance) }}
+                    {{ form_row(form.sexe) }}
 
                     <button type="submit" class="btn btn-primary">Valider</button>
                 {{ form_end(form) }}

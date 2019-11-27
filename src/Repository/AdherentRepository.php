@@ -19,6 +19,11 @@ class AdherentRepository extends ServiceEntityRepository
         parent::__construct($registry, Adherent::class);
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('nom' => 'asc','prenom' => 'asc'));
+    }
+
     // /**
     //  * @return Adherent[] Returns an array of Adherent objects
     //  */

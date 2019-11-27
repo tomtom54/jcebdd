@@ -9,8 +9,17 @@
 {% block platform_body %}
 
   <h2>{{ adherent.prenom ~ ' ' ~ adherent.nom }}</h2>
-  <i>Né le {{ adherent.dateNaissance|date('d/m/Y') }}</i>
-
+  <i>Né le {{ adherent.dateNaissance|date('d/m/Y') }}</i><br>
+  
+  {% if adherent.sexe == 1 %}
+      <i>Sexe masculin</i>
+  {% elseif adherent.sexe == 2 %}
+      <i>Sexe féminin</i>
+  {% elseif adherent.sexe == 3 %}
+      <i>Sexe autre</i>
+  {% else %}
+      <i>Sexe non défini</i>
+  {% endif %}
   {#<div class="well">
     {{ advert.content }}
   </div>#}

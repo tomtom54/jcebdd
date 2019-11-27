@@ -31,6 +31,11 @@ class Adherent
      */
     private $dateNaissance;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $sexe;
+
     public function __construct()
     {
         //Par défaut, la date de l'annonce est la date d'aujourd'hui
@@ -74,6 +79,18 @@ class Adherent
     public function setDateNaissance(\DateTimeInterface $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    public function getSexe(): ?int
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(int $sexe): self
+    {
+        $this->sexe = $sexe;
 
         return $this;
     }

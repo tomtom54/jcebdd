@@ -228,11 +228,9 @@ class AdherentController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Adherent::class);
 
         //Retrouver tous les Adherents par ordre descendant d'identifiant
-        $adherents = $repository->findby(
-          array(),
-          array('nom' => 'ASC'),
-          array('prenom' => 'ASC')
-        );
+        $adherents = $repository->findAll();
+
+        $NBAdherent = count($adherents);
 
         //initialisation tableau
         $listAdherents = array();
@@ -248,7 +246,8 @@ class AdherentController extends AbstractController
 
       // Et modifiez le 2nd argument pour injecter notre liste
       return $this->render('adherent/index.html.twig', array(
-        'listAdherents' => $listAdherents
+        'listAdherents' => $listAdherents,
+        'NBAdherent' => $NBAdherent
       ));
      }
 
