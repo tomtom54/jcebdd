@@ -1,0 +1,19 @@
+{# template/adherent/add.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+  Ajouter un {{ typeCodif }}- {{ parent() }}
+{% endblock %}
+
+{% block platform_body %}
+
+  <h2>Ajouter un {{ typeCodif }}</h2>
+
+  {{ include("adherent/form.html.twig") }}
+
+  <p>
+    Vous allez ajouter un {{ typeCodif }}
+  </p>
+
+{% endblock %}

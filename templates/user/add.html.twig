@@ -1,0 +1,19 @@
+{# template/adherent/add.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+  Ajouter un utilisateur - {{ parent() }}
+{% endblock %}
+
+{% block platform_body %}
+
+  <h2>Ajouter un utilisateur</h2>
+
+  {{ include("user/form.html.twig") }}
+
+  <p>
+    Vous allez ajouter un utilisateur
+  </p>
+
+{% endblock %}

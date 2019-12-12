@@ -7,20 +7,40 @@
 {% endblock %}
 
 {% block platform_body %}
-
-  <h2>Liste des adhérents ({{NBAdherent}})</h2>
-
-  <ul>
-    {% for adherent in listAdherents %}
-      <li>
-        <a href="{{ path('jce_adherent_view', {'id': adherent.id}) }}">
-          {{ adherent.prenom ~ ' ' ~ adherent.nom }}
-        </a>
-        né(e) le {{ adherent.dateNaissance|date('d/m/Y') }}
-      </li>
+  <table>
+    <thead>
+        <tr>
+            <th colspan="1"><h2>Liste des adhérents</h2></th>
+            <th>
+              <a href="{{ path('jce_adherent_add') }}" class="btn btn-default">
+                <i class="glyphicon glyphicon-plus"></i>
+                Ajouter un adhérent
+              </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+  {#<ul>#}
+    {% for adherent in listAdherents %}    
+      <tr>
+        <td>
+          <a href="{{ path('jce_adherent_view', {'id': adherent.id}) }}">
+            {{ adherent.prenom ~ ' ' ~ adherent.nom }}
+          </a>
+          {# né(e) le {{ adherent.dateNaissance|date('d/m/Y') }} #}
+        </td>
+      </tr>
     {% else %}
-      <li>Pas (encore !) d'adhérents</li>
+      <td>Pas (encore !) d'adhérents</td>
+      {#<li>Pas (encore !) d'adhérents</li>#}
     {% endfor %}
-  </ul>
-
+    {% if NBAdherent > 0 %}
+      <tr>  
+        <td>
+          <p>Nombre d'adhérent(s) : {{NBAdherent}} </p>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
 {% endblock %}

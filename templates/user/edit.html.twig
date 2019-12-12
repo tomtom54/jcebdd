@@ -1,0 +1,26 @@
+{# templates/adherent/edit.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+  Modifier un utilisateur - {{ parent() }}
+{% endblock %}
+
+{% block platform_body %}
+
+  <h2>Modifier un utilisateur</h2>
+
+  {{ include("user/form.html.twig") }}
+
+  <p>
+    Vous éditez un utilisateur déjà existant.
+  </p>
+
+  <p>
+    <a href="{{ path('jce_user_view', {'id': id }) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la visualisation de l'utilisateur
+    </a>
+  </p>
+
+{% endblock %}

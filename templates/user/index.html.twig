@@ -1,0 +1,46 @@
+{# templates/adherent/index.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+  Accueil - {{ parent() }}
+{% endblock %}
+
+{% block platform_body %}
+  <table>
+    <thead>
+        <tr>
+            <th colspan="1"><h2>Liste des utilisateurs</h2></th>
+            <th>
+              <a href="{{ path('jce_user_add') }}" class="btn btn-default">
+                <i class="glyphicon glyphicon-plus"></i>
+                Ajouter un utilisateur
+              </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+  {#<ul>#}
+    {% for user in listUsers %}    
+      <tr>
+        <td>
+          <a href="{{ path('jce_user_view', {'id': user.id}) }}">
+            {{ user.prenom ~ ' ' ~ user.nom }}
+          </a>
+          {# né(e) le {{ adherent.dateNaissance|date('d/m/Y') }} #}
+        </td>
+      </tr>
+    {% else %}
+      <td>Pas (encore !) d'utilisateur</td>
+      {#<li>Pas (encore !) d'adhérents</li>#}
+    {% endfor %}
+    {% if NBUser > 0 %}
+      <tr>  
+        <td>
+          <p>Nombre d'utilisateur(s) : {{NBUser}} </p>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+{% endblock %}

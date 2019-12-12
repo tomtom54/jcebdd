@@ -10,10 +10,15 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="security_login")
+     * @Route("/loginDeux", name="security_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        // Si le visiteur est déjà identifié, on le redirige vers l'accueil
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('jce_adherent_index');
+        }
+        
         // retrouver une erreur d'authentification s'il y en a une
         $error = $authenticationUtils->getLastAuthenticationError();
         // retrouver le dernier identifiant de connexion utilisé

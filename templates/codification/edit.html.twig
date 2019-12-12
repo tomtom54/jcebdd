@@ -1,0 +1,26 @@
+{# templates/adherent/edit.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+  Modifier un {{ codification.libelle }} - {{ parent() }}
+{% endblock %}
+
+{% block platform_body %}
+
+  <h2>Modifier un {{ codification.libelle }}</h2>
+
+  {{ include("adherent/form.html.twig") }}
+
+  <p>
+    Vous éditez un {{ codification.libelle }} déjà existant.
+  </p>
+
+  <p>
+    <a href="{{ path('jce_adherent_view', {'id': id }) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la visualisation de l'{{ codification.libelle }}
+    </a>
+  </p>
+
+{% endblock %}

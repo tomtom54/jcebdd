@@ -14,11 +14,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Repository\AdherentRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Twig\Environment;
 
 /**
- * @Route("/Adherent")
+ * @Route("/admin/adherent")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdherentController extends AbstractController
 {
@@ -218,7 +221,7 @@ class AdherentController extends AbstractController
 
       
       /**
-      * @Route("/index", name="index")
+      * @Route("/index", name="jce_adherent_indexAction")
       */
       public function indexAction($page)
       {

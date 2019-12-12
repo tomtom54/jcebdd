@@ -1,0 +1,20 @@
+#App/config/config.yaml
+
+fos_user:
+  db_driver: orm
+  firewall_name: main
+  user_class: App/Entity/User
+  from_email:
+    address: "tge@computer-engineering.fr"
+    sender_name: "tge@computer-engineering.fr"
+  service:
+    mailer: fos_user.mailer.twig_swift
+  registration:
+    confirmation:
+      enable: true
+      from_email:
+        address: noreply@monsiteweb.com
+        sender_name: Admin du tuto
+      template: MyApp
+framework:
+    default_locale: 'fr'
